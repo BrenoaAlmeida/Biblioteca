@@ -5,11 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using Repository;
 using Model;
+using Bussines;
+
 namespace Biblioteca.Controllers
 {
     public class EditoraController : Controller
     {
-        RepositoryFacede repositoryFacede = new RepositoryFacede();
+        RepositoryFacade repositoryFacede = new RepositoryFacade();
+        BibliotecaContext context;
         // GET: Editora
         public ActionResult Index()
         {
@@ -18,10 +21,10 @@ namespace Biblioteca.Controllers
 
         private ActionResult ObterEditoras()
         {
-            var editoras = repositoryFacede.EditoraRepository.ObterEditoras();
+            var editoras = repositoryFacede.Editora.GetAll();
             return View("Index", editoras);
         }
-        
+
         // GET: Editora/Create
         public ActionResult Criar()
         {
@@ -35,7 +38,7 @@ namespace Biblioteca.Controllers
             try
             {
                 // TODO: Add insert logic here
-                repositoryFacede.EditoraRepository.Adicionar(editora);
+                repositoryFacede.Editora.Add(editora);
                 return ObterEditoras();
             }
             catch
@@ -47,8 +50,8 @@ namespace Biblioteca.Controllers
         // GET: Editora/Edit/5
         public ActionResult Editar(int id)
         {
-            Editora editora = repositoryFacede.EditoraRepository.Buscar(id);
-            return View("Criar_Editar" , editora);
+            Editora editora = repositoryFacede.Editora.FindById(id);
+            return View("Criar_Editar", editora);
         }
 
         // POST: Editora/Edit/5
@@ -58,19 +61,19 @@ namespace Biblioteca.Controllers
             try
             {
                 // TODO: Add update logic here
-                repositoryFacede.EditoraRepository.Editar(editora);
+                    repositoryFacede.Editora.Edit(editora , editora.Id);
                 return ObterEditoras();
             }
-            catch
+            catch(ViolacaoRegraDeNegocio msg)
             {
-                return View();
+                return View("Criar_Editar" , msg);
             }
         }
 
         // GET: Editora/Delete/5
         public ActionResult Deletar(int id)
         {
-            Editora editora = repositoryFacede.EditoraRepository.Buscar(id);
+            Editora editora = repositoryFacede.Editora.FindById(id);
             return View(editora);
         }
 
@@ -81,7 +84,7 @@ namespace Biblioteca.Controllers
             try
             {
                 // TODO: Add delete logic here
-                repositoryFacede.EditoraRepository.Deletar(editora.Id);
+                repositoryFacede.Editora.Delete(editora.Id);
                 return ObterEditoras();
             }
             catch

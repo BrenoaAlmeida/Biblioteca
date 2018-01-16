@@ -10,27 +10,28 @@ namespace Biblioteca.Controllers
 {
     public class LeitorController : Controller
     {
-        RepositoryFacede repositoryFacede = new RepositoryFacede();
-        
+        RepositoryFacade repositoryFacede = new RepositoryFacade();
+
         // GET: Leitor
 
         private void CarregarDropDownListLivros()
-        {              
-            List<Livro> livros = repositoryFacede.LivroRepository.Livros();
+        {
+            RepositoryFacade repositoryFacede = new RepositoryFacade();
+            List<Livro> livros = repositoryFacede.Livro.GetAll();
             ViewBag.Livro_Id = new SelectList(livros, "Id", "Nome");
         }
 
 
         private ActionResult ObterLeitores()
         {
-            var listaDeLeitores = repositoryFacede.LeitorRepository.Leitores();
+            var listaDeLeitores = repositoryFacede.Leitor.GetAll();
             return View("Index", listaDeLeitores);
         }
 
         public ActionResult Index()
         {
             return ObterLeitores();
-        }    
+        }
 
         // GET: Leitor/Create
         public ActionResult Criar()
@@ -45,7 +46,7 @@ namespace Biblioteca.Controllers
         {
             try
             {
-                repositoryFacede.LeitorRepository.Adicionar(leitor);
+                repositoryFacede.Leitor.Add(leitor);
                 return ObterLeitores();
             }
             catch
@@ -58,8 +59,8 @@ namespace Biblioteca.Controllers
         public ActionResult Editar(int id)
         {
             CarregarDropDownListLivros();
-            Leitor leitor = repositoryFacede.LeitorRepository.Buscar(id);            
-            return View("Criar_Editar" , leitor);
+            Leitor leitor = repositoryFacede.Leitor.FindById(id);
+            return View("Criar_Editar", leitor);
         }
 
         // POST: Leitor/Edit/5
@@ -68,7 +69,7 @@ namespace Biblioteca.Controllers
         {
             try
             {
-                repositoryFacede.LeitorRepository.Editar(leitor);
+                repositoryFacede.Leitor.Editar(leitor);
                 return ObterLeitores();
             }
             catch
@@ -80,7 +81,7 @@ namespace Biblioteca.Controllers
         // GET: Leitor/Delete/5
         public ActionResult Deletar(int id)
         {
-            Leitor leitor = repositoryFacede.LeitorRepository.Buscar(id);
+            Leitor leitor = repositoryFacede.Leitor.FindById(id);
             return View(leitor);
         }
 
@@ -90,12 +91,12 @@ namespace Biblioteca.Controllers
         {
             try
             {
-                repositoryFacede.LeitorRepository.Excluir(leitor.Id);
+                repositoryFacede.Leitor.Delete(leitor.Id);
                 return ObterLeitores();
             }
             catch
             {
-                return View("Deletar" , "????");
+                return View("Deletar", "????");
             }
         }
     }

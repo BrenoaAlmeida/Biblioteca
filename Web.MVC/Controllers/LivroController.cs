@@ -11,11 +11,11 @@ namespace Biblioteca.Controllers
     public class LivroController : Controller
     {
 
-        RepositoryFacede repositoryFacede = new RepositoryFacede();
+        RepositoryFacade repositoryFacede = new RepositoryFacade();
 
         private ActionResult ObterLivros()
         {
-            var livros = repositoryFacede.LivroRepository.Livros();
+            var livros = repositoryFacede.Livro.GetAll();
             return View("Index", livros);
         }
 
@@ -35,7 +35,7 @@ namespace Biblioteca.Controllers
 
         private void CarregarDropDownListDeLivros()
         {
-            var editoras = repositoryFacede.EditoraRepository.ObterEditoras();
+            var editoras = repositoryFacede.Livro.GetAll();
             ViewBag.Editora_Id = new SelectList(editoras, "id", "Nome");
         }
 
@@ -46,22 +46,22 @@ namespace Biblioteca.Controllers
             try
             {
                 // TODO: Add insert logic here                                
-                repositoryFacede.LivroRepository.Adicionar(livro);
+                repositoryFacede.Livro.Add(livro);
                 return ObterLivros();
 
             }
-            catch(Exception msg)
+            catch (Exception msg)
             {
-                return View("Criar_Editar" , "Ocorreu o seguinte erro: " + msg);
+                return View("Criar_Editar", "Ocorreu o seguinte erro: " + msg);
             }
         }
 
         // GET: Livro/Edit/5
         public ActionResult Editar(int id)
         {
-            Livro livro = repositoryFacede.LivroRepository.Buscar(id);
+            Livro livro = repositoryFacede.Livro.FindById(id);
             CarregarDropDownListDeLivros();
-            return View("Criar_Editar" , livro);
+            return View("Criar_Editar", livro);
         }
 
         // POST: Livro/Edit/5
@@ -71,20 +71,20 @@ namespace Biblioteca.Controllers
             try
             {
                 // TODO: Add update logic here
-                repositoryFacede.LivroRepository.Editar(livro);
+                repositoryFacede.Livro.Editar(livro);
                 return ObterLivros();
             }
-            catch(Exception msg)
+            catch (Exception msg)
             {
                 string mensagem = msg.ToString();
-                return View("Index" , "Ocorreu o seguinte erro : " + mensagem);
+                return View("Index", "Ocorreu o seguinte erro : " + mensagem);
             }
-        }        
+        }
 
         // GET: Livro/Delete/5
-        public ActionResult Deletar(int id) 
+        public ActionResult Deletar(int id)
         {
-            Livro livro = repositoryFacede.LivroRepository.Buscar(id);
+            Livro livro = repositoryFacede.Livro.FindById(id);
             return View(livro);
         }
 
@@ -95,12 +95,12 @@ namespace Biblioteca.Controllers
             try
             {
                 // TODO: Add delete logic here                
-                repositoryFacede.LivroRepository.Excluir(livro.Id);
+                repositoryFacede.Livro.Delete(livro.Id);
                 return ObterLivros();
             }
-            catch(Exception msg)
+            catch (Exception msg)
             {
-                return View("Deletar" , "Ocorreu o seguinte erro: " + msg);
+                return View("Deletar", "Ocorreu o seguinte erro: " + msg);
             }
         }
     }

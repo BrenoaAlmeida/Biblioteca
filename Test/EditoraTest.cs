@@ -12,10 +12,11 @@ namespace Test
     [TestClass]
     public class EditoraTest
     {
+        private RepositoryFacade repositoryFacade;
         private EditoraRepository editoraRepository;
         private BibliotecaContext context;
         [TestInitialize]
-        public void Initialize()
+        public void Initialize()    
         {
             var connection = Effort.DbConnectionFactory.CreateTransient();
             context = new BibliotecaContext(connection);
@@ -37,8 +38,7 @@ namespace Test
             //arrange
             Editora editora = null;
             //act
-            context.Editoras.Add(editora);
-            editoraRepository.Salvar();
+            repositoryFacade.Editora.Add(editora);
             //assert
             Assert.AreEqual(typeof(ArgumentNullException), typeof(ArgumentNullException));
         }
@@ -49,8 +49,7 @@ namespace Test
             //arrange            
             Editora editora = PreencherObjeto();
             //act            
-            context.Editoras.Add(editora);
-            editoraRepository.Salvar();
+            repositoryFacade.Editora.Add(editora);
             //assert
             Assert.AreEqual(1, context.Editoras.Count());
         }
@@ -61,10 +60,9 @@ namespace Test
         {
             //arrange
             Editora editora = PreencherObjeto();
-            context.Editoras.Add(editora);
-            editoraRepository.Salvar();
+            repositoryFacade.Editora.Add(editora);
             //Act
-            editoraRepository.Deletar(editora.Id);            
+            repositoryFacade.Editora.Delete(editora.Id);           
             //Assert
             Assert.AreEqual(0 , context.Editoras.Count());
         }
@@ -82,15 +80,13 @@ namespace Test
             Editora edt3 = new Editora();
             edt3.Id = 3;
             edt3.Nome = "Evelyn";
-            context.Editoras.Add(edt);
-            context.Editoras.Add(edt2);
-            context.Editoras.Add(edt3);
-            editoraRepository.Salvar();
-            editoraRepository.Salvar();
-            editoraRepository.Salvar();
+            repositoryFacade.Editora.Add(edt);
+            repositoryFacade.Editora.Add(edt2);
+            repositoryFacade.Editora.Add(edt3);
+
             //Act
             Editora editoraBuscada = new Editora();
-            editoraBuscada = editoraRepository.Buscar(2);
+            editoraBuscada = repositoryFacade.Editora.FindById(2);
             //Assert
             Assert.AreEqual("Jeova", editoraBuscada.Nome);
         }

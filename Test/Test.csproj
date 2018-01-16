@@ -70,9 +70,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="EditoraTest.cs" />
+    <Compile Include="LivroTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bussines\Bussines.csproj">
+      <Project>{c3e8fe7a-6a6b-4693-890f-216a67348498}</Project>
+      <Name>Bussines</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{2FD65EA0-36D4-472B-930A-32DC6D066CDB}</Project>
       <Name>Model</Name>
